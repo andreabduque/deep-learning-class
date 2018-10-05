@@ -581,7 +581,7 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
         # Without teacher forcing: use its own predictions as the next input
         for di in range(target_length):
             decoder_output, decoder_hidden, decoder_attention = decoder(
-                decoder_input, decoder_hidden, encoder_output, encoder_outputs)
+                decoder_input, decoder_hidden)
             topv, topi = decoder_output.data.topk(1)
             ni = topi[0][0]
 
