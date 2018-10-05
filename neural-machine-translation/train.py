@@ -572,8 +572,8 @@ def train(input_variable, target_variable, encoder, decoder, encoder_optimizer, 
     if use_teacher_forcing:
         # Teacher forcing: Feed the target as the next input
         for di in range(target_length):
-            decoder_output, decoder_hidden, decoder_attention = decoder(
-                decoder_input, decoder_hidden, encoder_output, encoder_outputs)
+            decoder_output, decoder_hidden = decoder(
+                decoder_input, decoder_hidden)
             loss += criterion(decoder_output, target_variable[di])
             decoder_input = target_variable[di]  # Teacher forcing
 
@@ -725,8 +725,8 @@ def evaluate(encoder, decoder, sentence, max_length=MAX_LENGTH):
     decoder_attentions = torch.zeros(max_length, max_length)
 
     for di in range(max_length):
-        decoder_output, decoder_hidden, decoder_attention = decoder(decoder_input, decoder_hidden, encoder_output, encoder_outputs)
-        decoder_attentions[di] = decoder_attention.data
+        decoder_output, decoder_hidden = decoder(decoder_input, decoder_hidden)
+        #decoder_attentions[di] = decoder_attention.data
         topv, topi = decoder_output.data.topk(1)
         ni = topi[0][0]
         if ni == EOS_token:
